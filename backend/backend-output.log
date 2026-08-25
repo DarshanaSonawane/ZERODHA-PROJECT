@@ -1,0 +1,3 @@
+[dotenv@17.2.1] injecting env (2) from .env -- tip: 📡 observe env with Radar: https://dotenvx.com/radar
+Backend running on port 3002
+MongoDB connected!

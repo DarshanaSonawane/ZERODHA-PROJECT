@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
 import axios from "axios";
@@ -7,27 +7,40 @@ import GeneralContext from "./GeneralContext";
 
 import "./BuyActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3002";
+
+const BuyActionWindow = ({ uid, mode = "BUY" }) => {
+  const generalContext = useContext(GeneralContext);
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
 
-  const handleBuyClick = () => {
-    axios.post("http://localhost:3000/newOrder", {
+  const handleSubmitClick = () => {
+    axios.post(`${API_URL}/newOrder`, {
       name: uid,
       qty: stockQuantity,
       price: stockPrice,
-      mode: "BUY",
+      mode,
     });
 
-    GeneralContext.closeBuyWindow();
+    generalContext.closeBuyWindow();
   };
 
   const handleCancelClick = () => {
-    GeneralContext.closeBuyWindow();
+    generalContext.closeBuyWindow();
   };
 
   return (
-    <div className="container" id="buy-window" draggable="true">
+    <div
+      className={`container${mode === "SELL" ? " sell-mode" : ""}`}
+      id="buy-window"
+      draggable="true"
+    >
+      <div className="order-header">
+        <p className="order-uid">{uid}</p>
+        <span className={`order-type ${mode === "SELL" ? "sell" : "buy"}`}>
+          {mode}
+        </span>
+      </div>
       <div className="regular-order">
         <div className="inputs">
           <fieldset>
@@ -57,8 +70,11 @@ const BuyActionWindow = ({ uid }) => {
       <div className="buttons">
         <span>Margin required ₹140.65</span>
         <div>
-          <Link className="btn btn-blue" onClick={handleBuyClick}>
-            Buy
+          <Link
+            className={`btn ${mode === "SELL" ? "btn-red" : "btn-blue"}`}
+            onClick={handleSubmitClick}
+          >
+            {mode === "SELL" ? "Sell" : "Buy"}
           </Link>
           <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
