@@ -33,3 +33,7 @@ dist/
 build/
 .DS_Store
 *.log
+
+# Ignore .env files everywhere across backend, dashboard, frontend
+.env
+**/.env
