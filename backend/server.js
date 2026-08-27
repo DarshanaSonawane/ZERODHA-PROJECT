@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
-mongoose.connect("mongodb://127.0.0.1:27017/signupDB", {
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log("MongoDB Connected"))
@@ -33,4 +33,6 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+const PORT = process.env.PORT || 3002;
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
