@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "./api";
+import useLivePrices from "./useLivePrices";
+import PortfolioInsight from "./PortfolioInsight";
 import { VerticalGraph } from "./VerticalGraph";
 
  import { holdings } from "../data/data";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3002";
-
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
+  const { prices, flash } = useLivePrices();
+
+  // Live price falls back to the stored price until a tick arrives
+  const livePriceOf = (stock) => prices[stock.name] ?? stock.price;
 
   useEffect(() => {
-    axios.get(`${API_URL}/allHoldings`).then((res) => {
+    api.get("/allHoldings").then((res) => {
       // console.log(res.data);
       setAllHoldings(res.data);
     });
@@ -36,6 +40,8 @@ const Holdings = () => {
 
   return (
     <>
+      <PortfolioInsight />
+
       <h3 className="title">Holdings ({allHoldings.length})</h3>
 
       <div className="order-table">
@@ -52,17 +58,20 @@ const Holdings = () => {
           </tr>
 
           {allHoldings.map((stock, index) => {
-            const curValue = stock.price * stock.qty;
+            const curValue = livePriceOf(stock) * stock.qty;
             const isProfit = curValue - stock.avg * stock.qty >= 0.0;
             const profClass = isProfit ? "profit" : "loss";
             const dayClass = stock.isLoss ? "loss" : "profit";
+            const priceFlash = flash[stock.name];
 
             return (
               <tr key={index}>
                 <td>{stock.name}</td>
                 <td>{stock.qty}</td>
                 <td>{stock.avg.toFixed(2)}</td>
-                <td>{stock.price.toFixed(2)}</td>
+                <td className={priceFlash ? `flash-${priceFlash}` : ""}>
+                  {livePriceOf(stock).toFixed(2)}
+                </td>
                 <td>{curValue.toFixed(2)}</td>
                 <td className={profClass}>
                   {(curValue - stock.avg * stock.qty).toFixed(2)}

@@ -1,10 +1,33 @@
 import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+import { useAuth } from "./AuthContext";
 
 const Menu = () => {
-  const [selectedMenu, setSelectedMenu] = useState(0);
+  const { user, logout } = useAuth();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+
+  // Highlight follows the real URL, so programmatic navigation
+  // (e.g. the "Get started" button on Orders) updates the selection too
+  const { pathname } = useLocation();
+
+  const menuItems = [
+    { label: "Dashboard", to: "/" },
+    { label: "Orders", to: "/orders" },
+    { label: "Holdings", to: "/holdings" },
+    { label: "Positions", to: "/positions" },
+    { label: "Funds", to: "/funds" },
+    { label: "Apps", to: "/apps" },
+  ];
+
+  const initials = (user?.name || "U")
+    .split(" ")
+    .filter(Boolean)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
@@ -91,9 +114,18 @@ const Menu = () => {
         </ul>
         <hr />
         <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
+          <div className="avatar">{initials}</div>
+          <p className="username">{user?.email || "USERID"}</p>
         </div>
+        {isProfileDropdownOpen && (
+          <button
+            type="button"
+            className="auth-link logout-btn"
+            onClick={logout}
+          >
+            Logout
+          </button>
+        )}
       </div>
     </div>
   );

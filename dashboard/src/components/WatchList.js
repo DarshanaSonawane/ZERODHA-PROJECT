@@ -15,10 +15,12 @@ import {
 
 import { watchlist } from "../data/data";
 import { DoughnutChart } from "./DoughnoutChart";
+import useLivePrices from "./useLivePrices";
 
 const labels = watchlist.map((subArray) => subArray["name"]);
 
 const WatchList = () => {
+  const { prices, flash } = useLivePrices();
   const data = {
     labels,
     datasets: [
@@ -87,9 +89,14 @@ const WatchList = () => {
       </div>
 
       <ul className="list">
-        {watchlist.map((stock, index) => {
-          return <WatchListItem stock={stock} key={index} />;
-        })}
+        {watchlist.map((stock) => (
+          <WatchListItem
+            key={stock.name}
+            stock={stock}
+            livePrice={prices[stock.name]}
+            flashState={flash[stock.name]}
+          />
+        ))}
       </ul>
 
       <DoughnutChart data={data} />
@@ -99,7 +106,7 @@ const WatchList = () => {
 
 export default WatchList;
 
-const WatchListItem = ({ stock }) => {
+const WatchListItem = ({ stock, livePrice, flashState }) => {
   const [showWatchlistActions, setShowWatchlistActions] = useState(false);
 
   const handleMouseEnter = (e) => {
@@ -121,7 +128,9 @@ const WatchListItem = ({ stock }) => {
           ) : (
             <KeyboardArrowUp className="down" />
           )}
-          <span className="price">{stock.price}</span>
+          <span className={`price${flashState ? ` flash-${flashState}` : ""}`}>
+            {Number(livePrice ?? stock.price).toFixed(2)}
+          </span>
         </div>
       </div>
       {showWatchlistActions && <WatchListActions uid={stock.name} />}

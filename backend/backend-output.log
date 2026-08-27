@@ -1,3 +1,17 @@
-[dotenv@17.2.1] injecting env (2) from .env -- tip: 📡 observe env with Radar: https://dotenvx.com/radar
-Backend running on port 3002
+[dotenv@17.2.1] injecting env (5) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Backend running on port 3002 (HTTP + Socket.io)
 MongoDB connected!
+Socket client connected: YFctibbqWWaiXULDAAAB
+Socket client disconnected: YFctibbqWWaiXULDAAAB
+Socket client connected: Migd0T0wILURl_vTAAAD
+Socket client disconnected: Migd0T0wILURl_vTAAAD
+Socket client connected: CbUxzvKLKNi301HxAAAI
+Socket client connected: Lh7Jzy_GNGREv5Y3AAAJ
+Socket client disconnected: Lh7Jzy_GNGREv5Y3AAAJ
+Socket client connected: M_Es2Z80Y6_z_MxvAAAM
+Socket client disconnected: M_Es2Z80Y6_z_MxvAAAM
+Socket client connected: q_Cl_VTwznq4DHBcAAAP
+Socket client disconnected: q_Cl_VTwznq4DHBcAAAP
+Socket client connected: 6jQpPAkZRDf67w8HAAAS
+Socket client disconnected: 6jQpPAkZRDf67w8HAAAS
+Socket client disconnected: CbUxzvKLKNi301HxAAAI
