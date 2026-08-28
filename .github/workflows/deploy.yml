@@ -6,7 +6,32 @@ on:
       - main
 
 jobs:
+  build:
+    name: Build Dashboard
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install dashboard dependencies
+        working-directory: dashboard
+        run: npm ci
+
+      - name: Build dashboard
+        working-directory: dashboard
+        run: npm run build
+
   deploy:
+    name: Deploy to EC2
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +45,6 @@ jobs:
             cd /home/ec2-user/ZERODHA-PROJECT
             git pull origin main
             cd backend
-            npm install --production
+            npm ci --omit=dev
             pm2 restart zerodha-backend
             pm2 save
