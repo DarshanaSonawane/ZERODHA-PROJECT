@@ -368,3 +368,5 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 server.listen(PORT, () => {
   console.log(`Backend running on port ${PORT} (HTTP + Socket.io)`);
 });
+
+// CI/CD deployment test
