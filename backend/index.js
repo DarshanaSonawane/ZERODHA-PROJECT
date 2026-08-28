@@ -360,7 +360,7 @@ app.post("/login", async (req, res) => {
 });
 
 // ------------------- Connect to MongoDB -------------------
-mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URL)
   .then(() => console.log("MongoDB connected!"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
